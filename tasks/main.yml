@@ -1,0 +1,53 @@
+---
+- name: Install Depedencies
+  package:
+    name: git
+    state: present
+
+- name: Download Gerrit {{ gerrit_version }}
+  get_url:
+    url: https://gerrit-releases.storage.googleapis.com/gerrit-{{ gerrit_version }}.war
+    dest: /tmp/gerrit.war
+
+- name: Add gerrit user
+  user:
+    name: "{{ gerrit_user }}"
+
+- name: Create Install Directory
+  file:
+    path: "{{ installation_path }}"
+    state: directory
+    mode: 0750
+    owner: "{{ gerrit_user }}"
+
+- name: Initialize Gerrit Site
+  become_user: "{{ gerrit_user }}"
+  command: java -jar /tmp/gerrit.war init -d {{ installation_path }}
+  args:
+    creates: "{{ installation_path }}/etc/gerrit.config"
+
+# - name: Prep Start Script
+#   become_user: "{{ gerrit_user }}"
+#   lineinfile:
+#     path: "{{ installation_path }}/bin/gerrit.sh"
+#     state: present
+#     regexp: "^# {{ item }}"
+#     line: "{{ item }}"
+#   loop:
+#   - "chkconfig: 3 99 99"
+#   - "description: Gerrit Code Review"
+#   - "processname: gerrit"
+
+- name: Install Gerrit Service
+  template:
+    dest: /etc/systemd/system/gerrit.service
+    src: gerrit.service
+    mode: 0755
+    force: yes
+
+- name: Enable Gerrit Service
+  systemd:
+    name: gerrit
+    enabled: yes
+    state: started
+    daemon_reload: yes

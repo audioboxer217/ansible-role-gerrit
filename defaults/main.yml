@@ -1,0 +1,3 @@
+---
+installation_path: /opt/gerrit
+gerrit_version: "3.3.0"
