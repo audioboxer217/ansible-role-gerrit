@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: rhel7
+    image: registry.access.redhat.com/rhel7:7.9
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

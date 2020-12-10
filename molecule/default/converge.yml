@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Install Gerrit"
+      include_role:
+        name: "ansible-role-gerrit"
