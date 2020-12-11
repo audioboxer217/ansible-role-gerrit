@@ -1,6 +1,10 @@
 ---
 dependency:
   name: galaxy
+  options:
+    ignore-certs: True
+    ignore-errors: True
+    role-file: requirements.yml
 driver:
   name: docker
 platforms:
@@ -9,5 +13,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  options:
+    'vault-id': '@${MOLECULE_SCENARIO_DIRECTORY}/vault.pw'
+    'extra-vars': '@${MOLECULE_SCENARIO_DIRECTORY}/rhsm_vars.yml'
 verifier:
   name: ansible

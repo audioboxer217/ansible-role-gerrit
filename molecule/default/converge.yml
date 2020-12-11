@@ -2,6 +2,15 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Install Gerrit"
-      include_role:
-        name: "ansible-role-gerrit"
+  - name: Install Dependencies - Ansible
+    include_role:
+      name: "{{ dep_role }}"
+    loop:
+    - infopen.openjdk-jdk
+    - locp.cassandra
+    loop_control:
+      loop_var: dep_role
+
+  - name: Install Gerrit
+    include_role:
+      name: "ansible-role-gerrit"
