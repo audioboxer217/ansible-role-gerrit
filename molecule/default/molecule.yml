@@ -13,8 +13,9 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-  options:
-    'vault-id': '@${MOLECULE_SCENARIO_DIRECTORY}/vault.pw'
-    'extra-vars': '@${MOLECULE_SCENARIO_DIRECTORY}/rhsm_vars.yml'
+  env:
+    RHSM_USER: ${RHSM_USER}
+    RHSM_PASS: "${RHSM_PASS}"
+    RHSM_POOL: ${RHSM_POOL}
 verifier:
   name: ansible
